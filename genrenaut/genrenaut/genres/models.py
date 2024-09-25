@@ -1,7 +1,7 @@
 from django.db import models
 
 class Genre(models.Model):
-    display_name = models.CharField(max_length=250)
+    name = models.CharField(max_length=250)
     slug = models.SlugField(max_length=250, unique=True)
     spotify_playlist_id = models.CharField(max_length=250, unique=True)
     description = models.TextField()
@@ -9,7 +9,7 @@ class Genre(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ["display_name"]
+        ordering = ["name"]
 
     def __str__(self):
-        return self.display_name
+        return self.name

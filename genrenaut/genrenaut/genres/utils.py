@@ -1,7 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 from django.db import IntegrityError
-from models import Genre
+from django.utils.text import slugify
+from .models import Genre
 
 def fetch_everynoise_genres(url):
     # Send a GET request to the specified URL
@@ -45,18 +46,10 @@ def fetch_everynoise_genres(url):
         response.raise_for_status()
 
 def populate_genres(genre_list):
-    genres_to_create = [
-        Genre(name=name, spotify_playlist_id=playlist_id)
-        for name, playlist_id in genre_list
-    ]
-    
-    try:
-        Genre.objects.bulk_create(genres_to_create, ignore_conflicts=True)
-        print(f"Successfully added {len(genres_to_create)} genres.")
-    except IntegrityError as e:
-        print(f"Error occurred while populating genres: {e}")
-    except Exception as e:
-        print(f"Unexpected error occurred: {e}")
+    for name, playlist_id in genre_list:
+        slug = slugify(name)
+        Genre.objects.create(name=name, spotify_playlist_id=playlist_id, slug=slug)
+    print(f"Successfully added {len(genre_list)} genres.")
 
 # url="https://everynoise.com/thesoundofeverything.html"
 # genres = fetch_everynoise_genres(url)
