@@ -54,3 +54,28 @@ def populate_genres(genre_list):
 # url="https://everynoise.com/thesoundofeverything.html"
 # genres = fetch_everynoise_genres(url)
 # populate_genres(genres)
+
+def fetch_musicalyst_genres(url):
+    response = requests.get(url)
+    
+    if response.status_code == 200:
+        soup = BeautifulSoup(response.text, 'html.parser')
+        
+        genres = []
+        
+        # Find all 'li' elements with 'a' tags inside
+        for li in soup.find_all('li'):
+            a_tag = li.find('a')
+            if a_tag and 'id' in a_tag.attrs:
+                genre_name = a_tag.text.strip()
+                genre_id = a_tag['id']
+                genres.append((genre_name, genre_id))
+        
+        return genres
+    else:
+        response.raise_for_status()
+
+# Example usage:
+url = "https://musicalyst.com/genres"
+genres = fetch_musicalyst_genres(url)
+print(genres)
