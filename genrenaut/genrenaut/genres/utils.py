@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from django.db import IntegrityError
 from django.utils.text import slugify
-from .models import Genre
+# from genrenaut.genres.models import Genre
 
 def fetch_everynoise_genres(url):
     # Send a GET request to the specified URL
@@ -76,6 +76,30 @@ def fetch_musicalyst_genres(url):
         response.raise_for_status()
 
 # Example usage:
-url = "https://musicalyst.com/genres"
-genres = fetch_musicalyst_genres(url)
-print(genres)
+# url = "https://musicalyst.com/genres"
+# genres = fetch_musicalyst_genres(url)
+# print(genres)
+
+def scrape_genre_description(genre_slug):
+    url = f"https://musicalyst.com/genre/{genre_slug}"
+    
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Raise an exception for bad status codes
+        
+        soup = BeautifulSoup(response.text, 'html.parser')
+        description_p = soup.find('p')
+        
+        if description_p:
+            # Convert the p tag to a string, preserving internal HTML
+            description = str(description_p)
+            return description
+        else:
+            return f"No description found for genre: {genre_name}"
+    
+    except requests.RequestException as e:
+        return f"Error fetching description for {genre_name}: {str(e)}"
+    
+# Example usage:
+description = scrape_genre_description("ambient-industrial")
+print(description)
