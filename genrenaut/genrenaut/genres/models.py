@@ -3,8 +3,9 @@ from django.db import models
 class Genre(models.Model):
     name = models.CharField(max_length=250)
     slug = models.SlugField(max_length=250, unique=True)
-    spotify_playlist_id = models.CharField(max_length=250, unique=True)
-    description = models.TextField()
+    spotify_playlist_id = models.CharField(max_length=250, null=True, blank=True)
+    musicalyst_id = models.CharField(max_length=250, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

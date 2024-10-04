@@ -1,6 +1,6 @@
 from django.utils.text import slugify
-from genrenaut.genres.utils import fetch_everynoise_genres, fetch_musicalyst_genres, scrape_genre_description
-from genrenaut.genres.models import Genre
+from genres.utils import fetch_everynoise_genres, fetch_musicalyst_genres, scrape_genre_description
+from genres.models import Genre
 # from genrenaut.songs.models import Song
 
 def run_etl_process():
