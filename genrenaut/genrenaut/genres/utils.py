@@ -1,8 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
-from django.db import IntegrityError
 from django.utils.text import slugify
-# from genrenaut.genres.models import Genre
+
 
 def fetch_everynoise_genres(url):
     # Send a GET request to the specified URL
@@ -91,14 +90,14 @@ def scrape_genre_description(genre_slug):
         description_p = soup.find('p')
         
         if description_p:
-            # Convert the p tag to a string, preserving internal HTML
-            description = str(description_p)
-            return description
+            # Extract text content while preserving <a> tags
+            description = ''.join(str(content) if content.name == 'a' else content.strip() for content in description_p.contents)
+            return description.strip()
         else:
-            return f"No description found for genre: {genre_name}"
+            return f"No description found for genre: {genre_slug}"
     
     except requests.RequestException as e:
-        return f"Error fetching description for {genre_name}: {str(e)}"
+        return f"Error fetching description for {genre_slug}: {str(e)}"
     
 # Example usage:
 description = scrape_genre_description("ambient-industrial")
