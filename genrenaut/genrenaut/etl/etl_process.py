@@ -4,8 +4,8 @@ from genres.models import Genre
 # from genrenaut.songs.models import Song
 
 def run_etl_process():
-    everynoise_genres = fetch_everynoise_genres("https://everynoise.com/thesoundofeverything.html")
-    musicalyst_genres = fetch_musicalyst_genres("https://musicalyst.com/genres")
+    everynoise_genres = fetch_everynoise_genres()
+    musicalyst_genres = fetch_musicalyst_genres()
     
     # Create a dictionary of Musicalyst genres for easy lookup
     musicalyst_dict = {slugify(g['name']): g for g in musicalyst_genres}
